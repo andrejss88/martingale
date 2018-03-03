@@ -1,39 +1,39 @@
+import Roulettes.BetColor;
+import Roulettes.Roulette;
 import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class MartingalePlayerTest {
 
-    @Test(expectedExceptions = NoMoreMoneyException.class)
-    public void playerExitsWhenBetSizeGreaterThanBalance(){
-        MartingalePlayer player = new MartingalePlayer(4,2, 100);
-
-        int losingResult = BetColor.RED.getColor();
-        player.updateData(losingResult);
-    }
-
-
-    @Test(expectedExceptions = NoMoreMoneyException.class)
-    public void playerExitsWhenBetSizeGrowsTooBig(){
-        int balance = 6;
-        int betSize = 2;
-        MartingalePlayer player = new MartingalePlayer(balance,betSize, 100);
-
-        int losingResult = BetColor.RED.getColor();
-        player.updateData(losingResult); // lost, but can still play
-        Assert.assertEquals(player.getBalance(), balance - betSize);
-
-        player.updateData(losingResult);
-    }
+    Roulette veryPredictableRoulette  = new Roulette() {
+        @Override
+        public int spin() {
+            return BetColor.RED.getColor();
+        }
+    };
 
     @Test
-    public void playerCanPlayOneMoreTimeWhenBalanceGreaterThanBetSize(){
+    public void playerLosesGameWhenBetSizeGreaterThanBalance(){
+        MartingalePlayer player = new MartingalePlayer(4,5, 100);
+        player.setRoulette(veryPredictableRoulette);
+
+        assertFalse(player.playRoulette());
+    }
+
+
+    @Test
+    public void playerWinsWhenTargetBalanceReached(){
         int balance = 6;
         int betSize = 2;
-        MartingalePlayer player = new MartingalePlayer(balance,betSize, 100);
+        int targetBalance = 6;
+        MartingalePlayer player = new MartingalePlayer(balance,betSize, targetBalance);
+        player.setRoulette(veryPredictableRoulette);
 
-        int losingResult = BetColor.RED.getColor();
-        player.updateData(losingResult);
-        Assert.assertEquals(player.getBalance(), balance - betSize);
+        assertTrue(player.playRoulette());
     }
 
 

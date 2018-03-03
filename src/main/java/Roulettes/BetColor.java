@@ -1,3 +1,5 @@
+package Roulettes;
+
 import java.util.Random;
 
 public enum BetColor {

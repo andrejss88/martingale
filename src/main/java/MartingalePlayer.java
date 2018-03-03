@@ -1,6 +1,13 @@
-public class MartingalePlayer {
+import Roulettes.BetColor;
+import Roulettes.Roulette;
+import Roulettes.SimpleRoulette;
 
-    Roulette roulette = new Roulette();
+/**
+ * Martingale Player: always bets on Black
+ */
+public final class MartingalePlayer {
+
+    Roulette roulette = new SimpleRoulette();
 
     private int balance;
     private int targetBalance;
@@ -8,6 +15,7 @@ public class MartingalePlayer {
     private int betOnBlack = BetColor.BLACK.getColor(); // default strategy
 
     private int resetBetSize;
+    private boolean gameWon;
 
 
     public MartingalePlayer(int balance, int betSize, int targetBalance){
@@ -18,11 +26,40 @@ public class MartingalePlayer {
         resetBetSize = betSize;
     }
 
-    public void playRoulette(){
+    /**
+     * Set a Roulette that the player will play
+     */
+
+    public void setRoulette(Roulette roulette){
+        this.roulette = roulette;
+    }
+
+    public boolean playRoulette(){
         System.out.println("Starting with balance: " + getBalance());
-        while (!checkIfTargetReached()){
+
+        while (canContinuePlaying()){
             int spinResult = roulette.spin();
-            updateData(spinResult);
+            updateBalanceAndBetSize(spinResult);
+        }
+        return gameWon;
+    }
+
+    private boolean canContinuePlaying() {
+
+        if(balance >= targetBalance){
+            System.out.println("===========================");
+            System.out.println("Target balance reached: " + balance);
+            gameWon = true;
+            return false;
+
+        } else if(balance < betSize) {
+            System.out.println("===========================");
+            System.out.println("No more money! Remaining balance: " + balance + " but need " + betSize + " to continue");
+            gameWon = false;
+            return false;
+
+        } else {
+            return true;
         }
     }
 
@@ -30,34 +67,19 @@ public class MartingalePlayer {
         return balance;
     }
 
-    public void updateData(int spinResult){
-        boolean won = spinResult == betOnBlack;
+    private void updateBalanceAndBetSize(int spinResult){
+        boolean wonRound = spinResult == betOnBlack;
 
-        if(won){
+        if(wonRound){
 
             balance += betSize;     // increase balance
             betSize = resetBetSize; // reset to init
             System.out.println("WON! New Balance:  " + balance + ". Bet size for next round: " + betSize);
 
-            checkIfTargetReached();
-
         } else {
             balance -= betSize;
             betSize = betSize * 2;
             System.out.println("LOST! New Balance:  " + balance + ". Increasing bet size for next round: " + betSize);
-
-            checkIfNotBust();
-        }
-    }
-
-    public boolean checkIfTargetReached() {
-        return balance >= targetBalance;
-    }
-
-    private void checkIfNotBust() {
-        if(balance < betSize){
-            System.out.println("==========================");
-            throw new NoMoreMoneyException("No more money! Remaining balance: " + balance + " but need " + betSize + " to continue");
         }
     }
 }

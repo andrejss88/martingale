@@ -1,3 +1,5 @@
+import Roulettes.Roulette;
+import Roulettes.SimpleRoulette;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -13,7 +15,7 @@ public class RouletteTest {
     public void rouletteSpinProducesOnlyOneOrZero(){
 
         List<Integer> resultList = new ArrayList<>();
-        Roulette r = new Roulette();
+        Roulette r = new SimpleRoulette();
         // spin 100 times and populate list
         for(int i = 0; i < 100; i++){
             resultList.add(r.spin());
