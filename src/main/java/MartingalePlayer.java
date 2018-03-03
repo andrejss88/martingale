@@ -15,6 +15,7 @@ public final class MartingalePlayer {
     private int betOnBlack = BetColor.BLACK.getColor(); // default strategy
 
     private int resetBetSize;
+
     private boolean gameWon;
 
 
@@ -35,8 +36,7 @@ public final class MartingalePlayer {
     }
 
     public boolean playRoulette(){
-        System.out.println("Starting with balance: " + getBalance());
-
+//        System.out.println("Starting with balance: " + getBalance());
         while (canContinuePlaying()){
             int spinResult = roulette.spin();
             updateBalanceAndBetSize(spinResult);
@@ -44,19 +44,24 @@ public final class MartingalePlayer {
         return gameWon;
     }
 
+    public void resetBalanceAndBetSize(int balance, int betSize) {
+        this.balance = balance;
+        this.betSize = betSize;
+    }
+
     private boolean canContinuePlaying() {
 
         if(balance >= targetBalance){
-            System.out.println("===========================");
-            System.out.println("Target balance reached: " + balance);
+//            System.out.println("===========================");
+//            System.out.println("Target balance reached: " + balance);
             gameWon = true;
-            return false;
+            return false; // stop playing
 
         } else if(balance < betSize) {
-            System.out.println("===========================");
-            System.out.println("No more money! Remaining balance: " + balance + " but need " + betSize + " to continue");
+//            System.out.println("===========================");
+//            System.out.println("No more money! Remaining balance: " + balance + " but need " + betSize + " to continue");
             gameWon = false;
-            return false;
+            return false;  // stop playing
 
         } else {
             return true;
@@ -74,12 +79,12 @@ public final class MartingalePlayer {
 
             balance += betSize;     // increase balance
             betSize = resetBetSize; // reset to init
-            System.out.println("WON! New Balance:  " + balance + ". Bet size for next round: " + betSize);
+//            System.out.println("WON! New Balance:  " + balance + ". Bet size for next round: " + betSize);
 
         } else {
             balance -= betSize;
             betSize = betSize * 2;
-            System.out.println("LOST! New Balance:  " + balance + ". Increasing bet size for next round: " + betSize);
+//            System.out.println("LOST! New Balance:  " + balance + ". Increasing bet size for next round: " + betSize);
         }
     }
 }

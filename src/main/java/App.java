@@ -8,11 +8,12 @@ public class App {
 
         MartingalePlayer player = new MartingalePlayer(balance, betSize, targetBalance);
 
-        int numOfGames = 2;
-//        for(int i = 0; i <= numOfGames; i++){
+        int numOfGames = 5;
+        for(int i = 1; i <= numOfGames; i++){
             boolean gameWon = player.playRoulette();
             System.out.println(gameWon);
-//        }
+            player.resetBalanceAndBetSize(10, 2);
+        }
 
     }
 }
