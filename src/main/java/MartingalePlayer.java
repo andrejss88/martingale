@@ -10,8 +10,8 @@ public final class MartingalePlayer {
     Roulette roulette = new SimpleRoulette();
 
     private int balance;
-    private int targetBalance;
-    private int betSize;
+    private double targetBalance;
+    private double betSize;
     private int betOnBlack = BetColor.BLACK.getColor(); // default strategy
 
     private int resetBetSize;
@@ -19,7 +19,7 @@ public final class MartingalePlayer {
     private boolean gameWon;
 
 
-    public MartingalePlayer(int balance, int betSize, int targetBalance){
+    public MartingalePlayer(int balance, int betSize, double targetBalance){
         this.balance = balance;
         this.betSize = betSize;
         this.targetBalance = targetBalance;

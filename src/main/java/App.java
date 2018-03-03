@@ -1,19 +1,21 @@
 public class App {
 
+    private static int balance = 50;
+    private static int betSize = 1;
+    private static double targetBalance = 100;
+
     public static void main(String[] args){
 
-        int balance = 10;
-        int betSize = 2;
-        int targetBalance = 16;
-
         MartingalePlayer player = new MartingalePlayer(balance, betSize, targetBalance);
+        StatsManager manager = new StatsManager();
 
-        int numOfGames = 5;
+        int numOfGames = 10_000;
         for(int i = 1; i <= numOfGames; i++){
             boolean gameWon = player.playRoulette();
-            System.out.println(gameWon);
-            player.resetBalanceAndBetSize(10, 2);
+            manager.collectData(gameWon);
+            player.resetBalanceAndBetSize(balance, betSize);
         }
 
+        manager.printResults();
     }
 }
